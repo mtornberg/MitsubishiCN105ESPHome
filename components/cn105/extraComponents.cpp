@@ -1,8 +1,15 @@
 #include "cn105.h"
 #include <algorithm>
+#include <strings.h>
 #include <esphome/core/helpers.h>
 
 using namespace esphome;
+
+namespace {
+constexpr const char* HA_VERTICAL_VANE_MAP[7] = {
+    "AUTO", "UP", "MID_UP", "MID", "MID_DOWN", "DOWN", "SWING"
+};
+}
 
 
 void CN105Climate::generateExtraComponents() {
@@ -18,9 +25,11 @@ void CN105Climate::set_vertical_vane_select(
 
     this->vertical_vane_select_ = vertical_vane_select;
 
-    // builds option list from SwiCago vaneMap
+    // Expose readable HA labels while preserving the original CN105 vane mapping.
     this->vertical_vane_select_->traits.set_options({
-        VANE_MAP[0], VANE_MAP[1], VANE_MAP[2], VANE_MAP[3], VANE_MAP[4], VANE_MAP[5], VANE_MAP[6]
+        HA_VERTICAL_VANE_MAP[0], HA_VERTICAL_VANE_MAP[1], HA_VERTICAL_VANE_MAP[2],
+        HA_VERTICAL_VANE_MAP[3], HA_VERTICAL_VANE_MAP[4], HA_VERTICAL_VANE_MAP[5],
+        HA_VERTICAL_VANE_MAP[6]
         });
 
     this->vertical_vane_select_->setCallbackFunction([this](const char* setting) {
@@ -33,6 +42,34 @@ void CN105Climate::set_vertical_vane_select(
         this->wantedSettings.lastChange = CUSTOM_MILLIS;
         });
 
+}
+
+const char* CN105Climate::mapVerticalVaneFromHa(const char* setting) const {
+    if (setting == nullptr) {
+        return VANE_MAP[0];
+    }
+
+    for (size_t i = 0; i < 7; i++) {
+        if (strcasecmp(setting, HA_VERTICAL_VANE_MAP[i]) == 0) {
+            return VANE_MAP[i];
+        }
+    }
+
+    return setting;
+}
+
+const char* CN105Climate::mapVerticalVaneToHa(const char* setting) const {
+    if (setting == nullptr) {
+        return HA_VERTICAL_VANE_MAP[0];
+    }
+
+    for (size_t i = 0; i < 7; i++) {
+        if (strcmp(setting, VANE_MAP[i]) == 0) {
+            return HA_VERTICAL_VANE_MAP[i];
+        }
+    }
+
+    return setting;
 }
 
 void CN105Climate::set_horizontal_vane_select(

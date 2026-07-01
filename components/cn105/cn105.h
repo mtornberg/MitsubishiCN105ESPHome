@@ -375,6 +375,8 @@ namespace esphome {
         void setWideVaneSetting(const char* setting);
         void setAirflowControlSetting(const char* setting);
         void setFanSpeed(const char* setting);
+        const char* mapVerticalVaneFromHa(const char* setting) const;
+        const char* mapVerticalVaneToHa(const char* setting) const;
 
         void setHeatpumpConnected(bool state);
 

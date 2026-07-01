@@ -717,7 +717,7 @@ void CN105Climate::setFanSpeed(const char* setting) {
 }
 
 void CN105Climate::setVaneSetting(const char* setting) {
-    int index = lookupByteMapIndex(VANE_MAP, 7, setting);
+    int index = lookupByteMapIndex(VANE_MAP, 7, this->mapVerticalVaneFromHa(setting));
     if (index > -1) {
         wantedSettings.vane = VANE_MAP[index];
     } else {

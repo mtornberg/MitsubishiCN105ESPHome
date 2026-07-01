@@ -720,9 +720,10 @@ void CN105Climate::checkWideVaneSettings(heatpumpSettings& settings, bool update
 }
 void CN105Climate::updateExtraSelectComponents(heatpumpSettings& settings) {
     if (this->vertical_vane_select_ != nullptr) {
-        if (this->hasChanged(this->vertical_vane_select_->current_option(), settings.vane, "select vane")) {
+        const char* ha_vane = this->mapVerticalVaneToHa(settings.vane);
+        if (this->hasChanged(this->vertical_vane_select_->current_option(), ha_vane, "select vane")) {
             ESP_LOGI(TAG, "vane setting (extra select component) changed");
-            this->vertical_vane_select_->publish_state(settings.vane);
+            this->vertical_vane_select_->publish_state(ha_vane);
         }
     }
     if (this->horizontal_vane_select_ != nullptr) {
