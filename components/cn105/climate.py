@@ -564,7 +564,7 @@ def to_code(config):
                     )
                 )
         if custom_fan_modes:
-            cg.add(traits.set_supported_custom_fan_modes(custom_fan_modes))
+            cg.add(var.set_supported_custom_fan_modes(custom_fan_modes))
         for swing_mode_str in supports.get(CONF_SWING_MODE, DEFAULT_SWING_MODES):
             if swing_mode_str in climate.CLIMATE_SWING_MODES:
                 cg.add(
