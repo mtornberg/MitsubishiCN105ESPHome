@@ -89,5 +89,5 @@ climate:
       dual_setpoint: true
       # You can still specify supported modes as before
       mode: [AUTO, COOL, HEAT, DRY, FAN_ONLY]
-      fan_mode: [AUTO, QUIET, LOW, MEDIUM, HIGH]
+      fan_mode: [AUTO, QUIET, "1", "2", "3", "4"]
       swing_mode: ["OFF", VERTICAL]

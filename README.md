@@ -279,7 +279,7 @@ climate:
       dual_setpoint: true
       # You can still specify supported modes as before
       mode: [AUTO, COOL, HEAT, DRY, FAN_ONLY]
-      fan_mode: [AUTO, QUIET, LOW, MEDIUM, HIGH]
+      fan_mode: [AUTO, QUIET, "1", "2", "3", "4"]
       swing_mode: ["OFF", VERTICAL]
       # Specify which options to display in horizontal_vane_select dropdown
       # Defaults to all options: ["←←", "←", "|", "→", "→→", "←→", "SWING", "AIRFLOW CONTROL"]
@@ -1162,7 +1162,7 @@ climate:
       name: Vertical Vane
     supports:
       mode: [HEAT_COOL, COOL, HEAT, DRY, FAN_ONLY]
-      fan_mode: [AUTO, QUIET, LOW, MEDIUM, HIGH]
+      fan_mode: [AUTO, QUIET, "1", "2", "3", "4"]
       swing_mode: ["OFF", HORIZONTAL, VERTICAL]
       vane_type: split_horizontal  # ← Synchronizes both horizontal vane motors
 ```

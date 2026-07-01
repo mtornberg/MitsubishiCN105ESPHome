@@ -590,33 +590,33 @@ fan_mode_auto_action:
         id: splitunit
         fan_mode: "AUTO"
 
-# Low fan speed - quiet operation, minimal air circulation
+# Fan speed 1 - quiet operation, minimal air circulation
 fan_mode_low_action:
   then:
     - climate.control:
         id: splitunit
-        fan_mode: "LOW"
+        custom_fan_mode: "1"
 
-# Medium fan speed - balanced operation
+# Fan speed 2 - balanced operation
 fan_mode_medium_action:
   then:
     - climate.control:
         id: splitunit
-        fan_mode: "MEDIUM"
+        custom_fan_mode: "2"
 
-# High fan speed - maximum air circulation and cooling/heating power
+# Fan speed 4 - maximum air circulation and cooling/heating power
 fan_mode_high_action:
   then:
     - climate.control:
         id: splitunit
-        fan_mode: "HIGH"
+        custom_fan_mode: "4"
 
-# Middle fan speed - moderate air circulation
+# Fan speed 3 - moderate air circulation
 fan_mode_middle_action:
   then:
     - climate.control:
         id: splitunit
-        fan_mode: "MIDDLE"
+        custom_fan_mode: "3"
 
 # Quiet fan speed - minimal noise operation
 fan_mode_quiet_action:

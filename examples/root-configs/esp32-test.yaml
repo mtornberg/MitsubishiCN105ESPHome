@@ -259,7 +259,7 @@ climate:
       update_interval: 30s
     supports:
       mode: [COOL, HEAT, FAN_ONLY, DRY]
-      fan_mode: [AUTO, QUIET, LOW, MEDIUM, HIGH]
+      fan_mode: [AUTO, QUIET, "1", "2", "3", "4"]
       swing_mode: ["OFF", VERTICAL]
     visual:
       min_temperature: 17
@@ -267,6 +267,5 @@ climate:
       temperature_step:
         target_temperature: 0.5
         current_temperature: 0.1
-
 
 

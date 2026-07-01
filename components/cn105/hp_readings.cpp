@@ -750,13 +750,13 @@ void CN105Climate::checkFanSettings(heatpumpSettings& settings, bool updateCurre
         if (strcmp(settings.fan, "QUIET") == 0) {
             this->set_fan_mode_(climate::CLIMATE_FAN_QUIET);
         } else if (strcmp(settings.fan, "1") == 0) {
-            this->set_fan_mode_(climate::CLIMATE_FAN_LOW);
+            this->set_custom_fan_mode_("1");
         } else if (strcmp(settings.fan, "2") == 0) {
-            this->set_custom_fan_mode_("MEDIUM_LOW");
+            this->set_custom_fan_mode_("2");
         } else if (strcmp(settings.fan, "3") == 0) {
-            this->set_custom_fan_mode_("MEDIUM_HIGH");
+            this->set_custom_fan_mode_("3");
         } else if (strcmp(settings.fan, "4") == 0) {
-            this->set_fan_mode_(climate::CLIMATE_FAN_HIGH);
+            this->set_custom_fan_mode_("4");
         } else { //case "AUTO" or default:
             this->set_fan_mode_(climate::CLIMATE_FAN_AUTO);
         }

@@ -120,14 +120,16 @@ CONF_DUAL_SETPOINT = "dual_setpoint"
 CONF_RESTORE_SETPOINTS = "restore_setpoints"
 
 DEFAULT_CLIMATE_MODES = ["AUTO", "COOL", "HEAT", "DRY", "FAN_ONLY", "HEAT_COOL"]
-DEFAULT_FAN_MODES = ["AUTO", "QUIET", "LOW", "MEDIUM_LOW", "MEDIUM_HIGH", "HIGH"]
+DEFAULT_FAN_MODES = ["AUTO", "QUIET", "1", "2", "3", "4"]
 DEFAULT_SWING_MODES = ["OFF", "VERTICAL", "HORIZONTAL", "BOTH"]
 
 FAN_MODE_ALIASES = {
-    "MEDIUM": "MEDIUM_LOW",
-    "MIDDLE": "MEDIUM_HIGH",
+    "LOW": "1",
+    "MEDIUM": "2",
+    "MIDDLE": "3",
+    "HIGH": "4",
 }
-CUSTOM_FAN_MODES = ["MEDIUM_LOW", "MEDIUM_HIGH"]
+CUSTOM_FAN_MODES = ["1", "2", "3", "4"]
 
 
 def validate_cn105_fan_mode(value):

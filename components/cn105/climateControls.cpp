@@ -355,10 +355,14 @@ void CN105Climate::controlFan() {
 
     if (this->has_custom_fan_mode()) {
         const std::string custom_fan_mode(this->get_custom_fan_mode());
-        if (custom_fan_mode == "MEDIUM_LOW") {
+        if (custom_fan_mode == "1") {
+            this->setFanSpeed("1");
+        } else if (custom_fan_mode == "2") {
             this->setFanSpeed("2");
-        } else if (custom_fan_mode == "MEDIUM_HIGH") {
+        } else if (custom_fan_mode == "3") {
             this->setFanSpeed("3");
+        } else if (custom_fan_mode == "4") {
+            this->setFanSpeed("4");
         } else {
             ESP_LOGW(TAG, "control - received unsupported custom fan mode request: %s", custom_fan_mode.c_str());
         }
