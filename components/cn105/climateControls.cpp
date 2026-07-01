@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cmath>
 #include <map>
+#include <string>
 #include <vector>
 #include <utility>
 
@@ -235,11 +236,19 @@ bool CN105Climate::processTemperatureChange(const esphome::climate::ClimateCall&
 }
 
 bool CN105Climate::processFanChange(const esphome::climate::ClimateCall& call) {
+    if (call.has_custom_fan_mode()) {
+        const std::string custom_fan_mode(call.get_custom_fan_mode());
+        ESP_LOGD("control", "Custom fan change asked");
+        this->set_custom_fan_mode_(custom_fan_mode.c_str());
+        this->controlFan();
+        return true;
+    }
+
     if (!call.get_fan_mode().has_value()) {
         return false;
     }
     ESP_LOGD("control", "Fan change asked");
-    this->fan_mode = *call.get_fan_mode();
+    this->set_fan_mode_(*call.get_fan_mode());
     this->controlFan();
     return true;
 }
@@ -343,6 +352,18 @@ void CN105Climate::controlSwing() {
     }
 }
 void CN105Climate::controlFan() {
+
+    if (this->has_custom_fan_mode()) {
+        const std::string custom_fan_mode(this->get_custom_fan_mode());
+        if (custom_fan_mode == "MEDIUM_LOW") {
+            this->setFanSpeed("2");
+        } else if (custom_fan_mode == "MEDIUM_HIGH") {
+            this->setFanSpeed("3");
+        } else {
+            ESP_LOGW(TAG, "control - received unsupported custom fan mode request: %s", custom_fan_mode.c_str());
+        }
+        return;
+    }
 
     switch (this->fan_mode.value()) {
     case climate::CLIMATE_FAN_OFF:

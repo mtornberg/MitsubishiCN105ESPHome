@@ -120,8 +120,21 @@ CONF_DUAL_SETPOINT = "dual_setpoint"
 CONF_RESTORE_SETPOINTS = "restore_setpoints"
 
 DEFAULT_CLIMATE_MODES = ["AUTO", "COOL", "HEAT", "DRY", "FAN_ONLY", "HEAT_COOL"]
-DEFAULT_FAN_MODES = ["AUTO", "MIDDLE", "QUIET", "LOW", "MEDIUM", "HIGH"]
+DEFAULT_FAN_MODES = ["AUTO", "QUIET", "LOW", "MEDIUM_LOW", "MEDIUM_HIGH", "HIGH"]
 DEFAULT_SWING_MODES = ["OFF", "VERTICAL", "HORIZONTAL", "BOTH"]
+
+FAN_MODE_ALIASES = {
+    "MEDIUM": "MEDIUM_LOW",
+    "MIDDLE": "MEDIUM_HIGH",
+}
+CUSTOM_FAN_MODES = ["MEDIUM_LOW", "MEDIUM_HIGH"]
+
+
+def validate_cn105_fan_mode(value):
+    value = cv.string_strict(value).upper()
+    if value in CUSTOM_FAN_MODES or value in FAN_MODE_ALIASES:
+        return value
+    return climate.validate_climate_fan_mode(value)
 
 FAHRENHEIT_MODES = {
     "disabled": 0,
@@ -442,7 +455,7 @@ CONFIG_SCHEMA = (
                     ): cv.ensure_list(climate.validate_climate_mode),
                     cv.Optional(
                         CONF_FAN_MODE, default=DEFAULT_FAN_MODES
-                    ): cv.ensure_list(climate.validate_climate_fan_mode),
+                    ): cv.ensure_list(validate_cn105_fan_mode),
                     cv.Optional(
                         CONF_SWING_MODE, default=DEFAULT_SWING_MODES
                     ): cv.ensure_list(climate.validate_climate_swing_mode),
@@ -536,13 +549,20 @@ def to_code(config):
         # ESPHome's default behavior for modes like COOL/HEAT is to enable single-point target temperature.
         # We don't need to explicitly force single-point or clear the dual flag (it's off by default).
 
+        custom_fan_modes = []
         for fan_mode_str in supports.get(CONF_FAN_MODE, DEFAULT_FAN_MODES):
-            if fan_mode_str in climate.CLIMATE_FAN_MODES:
+            exposed_fan_mode = FAN_MODE_ALIASES.get(fan_mode_str, fan_mode_str)
+            if exposed_fan_mode in CUSTOM_FAN_MODES:
+                if exposed_fan_mode not in custom_fan_modes:
+                    custom_fan_modes.append(exposed_fan_mode)
+            elif exposed_fan_mode in climate.CLIMATE_FAN_MODES:
                 cg.add(
                     traits.add_supported_fan_mode(
-                        climate.CLIMATE_FAN_MODES[fan_mode_str]
+                        climate.CLIMATE_FAN_MODES[exposed_fan_mode]
                     )
                 )
+        if custom_fan_modes:
+            cg.add(traits.set_supported_custom_fan_modes(custom_fan_modes))
         for swing_mode_str in supports.get(CONF_SWING_MODE, DEFAULT_SWING_MODES):
             if swing_mode_str in climate.CLIMATE_SWING_MODES:
                 cg.add(

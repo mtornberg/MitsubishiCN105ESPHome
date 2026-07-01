@@ -1,6 +1,7 @@
 #include "cn105.h"
 
 #include <map>
+#include <string>
 
 using namespace esphome;
 
@@ -746,20 +747,23 @@ void CN105Climate::checkFanSettings(heatpumpSettings& settings, bool updateCurre
         }
 
         if (strcmp(settings.fan, "QUIET") == 0) {
-            this->fan_mode = climate::CLIMATE_FAN_QUIET;
+            this->set_fan_mode_(climate::CLIMATE_FAN_QUIET);
         } else if (strcmp(settings.fan, "1") == 0) {
-            this->fan_mode = climate::CLIMATE_FAN_LOW;
+            this->set_fan_mode_(climate::CLIMATE_FAN_LOW);
         } else if (strcmp(settings.fan, "2") == 0) {
-            this->fan_mode = climate::CLIMATE_FAN_MEDIUM;
+            this->set_custom_fan_mode_("MEDIUM_LOW");
         } else if (strcmp(settings.fan, "3") == 0) {
-            this->fan_mode = climate::CLIMATE_FAN_MIDDLE;
+            this->set_custom_fan_mode_("MEDIUM_HIGH");
         } else if (strcmp(settings.fan, "4") == 0) {
-            this->fan_mode = climate::CLIMATE_FAN_HIGH;
+            this->set_fan_mode_(climate::CLIMATE_FAN_HIGH);
         } else { //case "AUTO" or default:
-            this->fan_mode = climate::CLIMATE_FAN_AUTO;
+            this->set_fan_mode_(climate::CLIMATE_FAN_AUTO);
         }
         if (this->fan_mode.has_value()) {
             ESP_LOGD(TAG, "Fan mode is: %i", static_cast<int>(this->fan_mode.value()));
+        } else if (this->has_custom_fan_mode()) {
+            const std::string custom_fan_mode(this->get_custom_fan_mode());
+            ESP_LOGD(TAG, "Custom fan mode is: %s", custom_fan_mode.c_str());
         } else {
             ESP_LOGD(TAG, "Fan mode is not set");
         }
